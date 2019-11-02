@@ -1,0 +1,44 @@
+.list-item {
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+
+    margin: 0.6rem;
+    font-size: 0.8rem;
+}
+
+.list-item__text {
+  position: relative;
+
+  text-overflow: ellipsis;
+}
+
+.list-item__text::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: var(--darkMainColor);
+  top: calc(50% + 1px);
+  left: 0;
+}
+
+.list-item__text:hover {
+  color: var(--darkMainColor);
+}
+
+.list-item__text:hover::before {
+  animation: canceling 0.6s ease-out 0s 1 normal forwards running;
+}
+
+@keyframes canceling {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}

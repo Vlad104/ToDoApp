@@ -1,4 +1,4 @@
-import { IListItem, ADD_ITEM, DELETE_ITEM, RESET_ALL, ListActionTypes } from './types';
+import { IListItem, ADD_ITEM, DELETE_ITEM, RESET_ALL, SAVE_STATE, LOAD_STATE, ListActionTypes } from './types';
 
 export function addItem(item: IListItem): ListActionTypes {
     return {
@@ -17,5 +17,17 @@ export function deleteItem(item: IListItem): ListActionTypes {
 export function resetAll(): ListActionTypes {
     return {
         type: RESET_ALL
+    }
+}
+
+export function saveState(): ListActionTypes {
+    return {
+        type: SAVE_STATE
+    }
+}
+
+export function loadState(): ListActionTypes {
+    return {
+        type: LOAD_STATE
     }
 }

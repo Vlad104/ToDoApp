@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { IoIosAdd, IoIosRefresh } from 'react-icons/io';
 import { Input } from '../Input/Input'; 
 
 import './InputForm.css';
@@ -7,6 +7,7 @@ import './InputForm.css';
 interface IInputFormProps {
     placeholder?: string;
     onSave: (text: string) => void;
+    onReset: () => void;
 }
 
 interface IInputFormState {
@@ -21,22 +22,21 @@ export class InputForm extends React.Component<IInputFormProps, IInputFormState>
 
     render() {
         return (
-            <div>
+            <div className="input-form">
                 <Input
                     text={this.state.text}
                     placeholder={this.props.placeholder}
                     onChange={this.onChange}
+                    onReset={this.reset}
                     onSave={this.onSave}
                 />
-                <input
-                    type="button"
-                    value="+"
+                <IoIosAdd
+                    className="input-form__button"
                     onClick={this.onSave}
                 />
-                <input
-                    type="button"
-                    value="-"
-                    onClick={this.reset}
+                <IoIosRefresh
+                    className="input-form__button"
+                    onClick={this.props.onReset}
                 />
             </div>
         )

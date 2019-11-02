@@ -9,6 +9,7 @@
     "@types/react-dom": "16.9.3",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-icons": "^3.8.0",
     "react-redux": "^7.1.1",
     "react-scripts": "3.2.0",
     "redux": "^4.0.4",
@@ -36,6 +37,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-redux": "^7.1.5"
+    "@types/react-redux": "^7.1.5",
+    "arkit": "^1.6.2"
   }
 }

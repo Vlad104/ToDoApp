@@ -1,0 +1,11 @@
+.time {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 8rem;
+  justify-content: space-between;
+  bottom: 10px;
+  right: 10px;
+  font-size: 1.4rem;
+  color: var(--mainColor);
+}

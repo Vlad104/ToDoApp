@@ -1,12 +1,12 @@
 import React from 'react';
-import List from './containers/List/List';
+import Main from './views/Main/Main';
 
 import './App.css';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <List />
+      <Main />
     </div>
   );
 }

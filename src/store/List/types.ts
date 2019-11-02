@@ -9,6 +9,8 @@ export interface IListState {
 export const ADD_ITEM = 'ADD_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
 export const RESET_ALL = 'RESET_ALL';
+export const SAVE_STATE = 'SAVE_STATE';
+export const LOAD_STATE = 'LOAD_STATE';
 
 interface IAddItemAction {
     type: typeof ADD_ITEM;
@@ -24,4 +26,12 @@ interface IResetAllAction {
     type: typeof RESET_ALL;
 }
 
-export type ListActionTypes = IAddItemAction | IDeleteItemAction | IResetAllAction;
+interface ISaveStateAction {
+    type: typeof SAVE_STATE;
+}
+
+interface ILoadStateAction {
+    type: typeof LOAD_STATE;
+}
+
+export type ListActionTypes = IAddItemAction | IDeleteItemAction | IResetAllAction | ISaveStateAction | ILoadStateAction;

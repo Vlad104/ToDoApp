@@ -1,4 +1,4 @@
-import { IListState, ListActionTypes, ADD_ITEM, DELETE_ITEM, RESET_ALL } from './types';
+import { IListState, ListActionTypes, ADD_ITEM, DELETE_ITEM, RESET_ALL, SAVE_STATE, LOAD_STATE } from './types';
 
 const initialState: IListState = {
     items: []
@@ -18,9 +18,20 @@ export function listReducer(state = initialState, action: ListActionTypes) : ILi
             return {
                 items: []
             }
+        case SAVE_STATE:
+            localSave(state);
+            return state;
+        case LOAD_STATE:
+            return localLoad();
         default:
             return state
     }
 }
 
-// export type ListState = ReturnType<typeof listReducer>;
+function localSave(state: IListState) {
+    localStorage.list = JSON.stringify(state);
+}
+
+function localLoad() {
+    return localStorage.list ? JSON.parse(localStorage.list) : initialState;
+}
