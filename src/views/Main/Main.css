@@ -1,9 +1,1 @@
-.main-view__person {
-    position: absolute;
 
-    top: 10px;
-    right: 10px;
-
-    height: 2rem;
-    color: var(--mainColor);
-}

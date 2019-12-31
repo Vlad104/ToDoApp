@@ -1,0 +1,41 @@
+.modal {
+    position: fixed;
+    z-index: 100;
+
+    top: 40%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 500px;
+
+    border: 1px solid var(--mainColor);
+    border-radius: 0.4rem;
+    background: var(--navbarColor);
+}
+
+.modal__back {
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: #797979;
+    opacity: 0.6;
+}
+
+.modal__header {
+    position: relative;
+    border-bottom: 1px solid var(--mainColor);
+    margin: 0;
+    text-align: left;
+}
+
+.modal__close {
+    position: absolute;
+    top: 0.1rem;
+    right: 0.1rem;
+}

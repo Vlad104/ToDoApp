@@ -3,6 +3,7 @@ import React from "react";
 import './Time.css';
 
 interface ITimeProps {
+  className?: string;
 }
 
 interface ITimeState {
@@ -25,7 +26,7 @@ export class Time extends React.Component<ITimeProps, ITimeState> {
 
   public render() {
     return (
-      <div className="time">
+      <div className={`time ${this.props.className}`}>
         <a>{this.state.time}</a>
         <a>{this.state.date}</a>
       </div>

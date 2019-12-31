@@ -37,7 +37,7 @@ class List extends React.Component<IListProps> {
         return (
             <div className="list">
                 <InputForm
-                    placeholder="Enter new task"
+                    placeholder="Enter new task ..."
                     onSave={this.onAddItem}
                     onReset={this.props.onResetAll}
                 />

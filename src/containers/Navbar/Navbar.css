@@ -1,0 +1,25 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 2rem;
+
+    background: var(--navbarColor);
+    box-shadow: 0 0 0.2rem 0 #000;
+}
+
+.navbar__time {
+    top: 50%;
+    left: 1rem;
+    transform: translate(0, -50%);
+}
+
+.navbar-view__person {
+    position: absolute;
+
+    top: 50%;
+    right: 0;
+    transform: translate(-50%, -50%);
+
+    color: var(--mainColor);
+}

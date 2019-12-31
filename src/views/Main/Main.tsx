@@ -1,16 +1,17 @@
 import React from 'react';
-// import { MdPerson } from 'react-icons/md';
+
+import Navbar from '../../containers/Navbar/Navbar';
 import List from '../../containers/List/List';
-import { Time } from '../../components/Time/Time';
+import SignModal from '../../containers/SignModal/SignModal';
 
 import './Main.css';
 
 const MainView: React.FC = () => {
   return (
     <div className="main-view">
-      {/* <MdPerson className="main-view__person" /> */}
-      <Time />
+      <Navbar />
       <List />
+      <SignModal />
     </div>
   );
 }
