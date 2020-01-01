@@ -5,17 +5,23 @@ import './Input.css';
 interface IInputProps {
     text: string;
     placeholder?: string;
+    type: string;
+    className?: string;
     onChange: (text: string) => void;
     onReset: () => void;
     onSave: () => void;
 }
 
 export class Input extends React.Component<IInputProps> {
+    static defaultProps = {
+        type: "text",
+    };
+
     render() {
         return (
-            <div className="input">
+            <div className={`${this.props.className} input`}>
                 <input
-                    type="text"
+                    type={this.props.type}
                     autoFocus
                     value={this.props.text}
                     placeholder={this.props.placeholder}

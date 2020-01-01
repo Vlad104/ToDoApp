@@ -1,0 +1,27 @@
+.button {
+    color: var(--mainColor);
+    border: 1px solid var(--secondColor);
+    border-radius: 0.2rem;
+    background: var(--secondColor);
+
+    font-size: 1rem;
+    padding: 0.1rem;
+}
+
+.button:hover {
+  border-color: var(--secondDarkColor);
+  background: var(--secondDarkColor);
+}
+
+.button:active {
+  border-color: var(--secondDarkColor);
+  background: var(--secondDarkColor);
+  box-shadow: inset 0px 0px 0.4rem var(--secondColor);
+}
+
+.button:not(hover),
+.button:not(active) {
+  transition: 0.3s;
+  border-color: var(--secondColor);
+  background: var(--secondColor);
+}

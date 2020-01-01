@@ -17,16 +17,16 @@ export class Modal extends React.Component<IModalProps> {
             this.props.isOpen && (
                 <>
                     <div className="modal">
+                        <IoIosClose
+                            className="modal__close"
+                            onClick={this.props.onClose}
+                        />
                         <p className="modal__header">
                             {this.props.header}
-                            <IoIosClose
-                                className="modal__close"
-                                onClick={this.props.onClose}
-                            />
                         </p> 
                         {this.props.body} 
                     </div>
-                    <div className="modal__back"></div>
+                    <div className="modal__back" onClick={this.props.onClose}></div>
                 </>
             )
         );

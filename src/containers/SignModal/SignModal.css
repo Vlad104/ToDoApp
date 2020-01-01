@@ -1,0 +1,8 @@
+.sign-modal {
+    display: flex;
+    flex-direction: column;
+}
+
+.sign-modal__field {
+    margin-bottom: 0.6rem;
+}

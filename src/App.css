@@ -37,12 +37,6 @@ a {
   user-select: none;
 }
 
-input[type=button],
-input[type=button]:focus,
-input[type=button]:active{
-	border:1px solid;
-}
-
 .App {
   width: 100vw;
 }
