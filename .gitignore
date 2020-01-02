@@ -26,3 +26,5 @@ yarn-error.log*
 
 services/api/dist
 services/front/public
+ormconfig.json
+*.sql

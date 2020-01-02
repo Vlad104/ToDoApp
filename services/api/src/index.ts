@@ -1,19 +1,42 @@
-import dotenv from "dotenv";
-import express from "express";
+import 'reflect-metadata';
+
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import express from 'express';
+import { createConnection } from 'typeorm';
+
+import router from './controllers/router';
 
 dotenv.config();
 
-const port = process.env.SERVER_PORT;
-
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(router);
 
-// define a route handler for the default home page
-app.get( "/", ( req: any, res: { send: (arg0: string) => void; } ) => {
-    res.send( "Hello world!" );
-} );
+const initDB = async () => {
+    try {
+        const conn = await createConnection();
+    } catch (err) {
+        // tslint:disable-next-line: no-console
+        console.error(err);
+    }
+};
 
-// start the Express server
-app.listen( port, () => {
-    // tslint:disable-next-line: no-console
-    console.log( `server started at http://localhost:${ port }` );
-});
+const startServer = async () => {
+    return new Promise((resolve, reject) => {
+        app.listen(process.env.SERVER_PORT, () => {
+            // tslint:disable-next-line: no-console
+            console.log(`server started at http://localhost: ${process.env.SERVER_PORT}`);
+            resolve(true);
+        // tslint:disable-next-line: no-console
+        }).on('error', console.error);
+    });
+};
+
+async function start() {
+    await initDB();
+    await startServer();
+}
+
+start();
