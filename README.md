@@ -1,10 +1,16 @@
-# Simple offline To Do App | boilerplate for others app
+# Simple To Do App
 
-## Using:
+## Services
+* Front
+* Api
+
+## Front use:
 * TypeScript
 * React
 * Redux
 
-## How to launch:
-* npm i
-* npm start
+## Api use:
+* TypeScript
+* Express
+* TypeORM
+* PostgreSQL
