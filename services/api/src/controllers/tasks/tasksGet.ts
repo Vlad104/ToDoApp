@@ -9,9 +9,8 @@ export default async function(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await taskService.getAll();
 
-      res.status(HttpStatus.OK).json({ response });
+      res.status(HttpStatus.OK).json(response);
     } catch (err) {
-        console.log(err);
         const error = {
         code: HttpStatus.BAD_REQUEST,
         errorObj: err

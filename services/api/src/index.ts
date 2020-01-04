@@ -1,9 +1,11 @@
 import 'reflect-metadata';
 
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import { createConnection } from 'typeorm';
+import { config } from './config/config';
 
 import router from './controllers/router';
 
@@ -12,6 +14,7 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors(config.corsOptions));
 app.use(router);
 
 const initDB = async () => {

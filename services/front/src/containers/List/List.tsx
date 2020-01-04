@@ -1,23 +1,27 @@
 import React from 'react';
-import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux';
 
 import { IListItem, ListActionTypes } from '../../store/List/types';
-import { addItem, deleteItem, resetAll, saveState, loadState } from '../../store/List/actions';
+import { addItem, deleteItem, resetAll, saveState, loadState, fetchState } from '../../store/List/actions';
 import { AppState } from '../../store/index';
 
 import { InputForm } from '../../components/InputForm/InputForm';
+import { Loading } from '../../components/Loading/Loading';
 import { ListItem } from './Item/ListItem';
 
 import './List.css';
 
 interface IListProps {
     items: IListItem[];
+    error: boolean;
+    loading: boolean;
     onAddItem: typeof addItem;
     onDeleteItem: typeof deleteItem;
     onResetAll: typeof resetAll;
     onSaveState: typeof saveState;
     onLoadState: typeof loadState;
+    onFetchState: () => Promise<void>;
 }
 
 class List extends React.Component<IListProps> {
@@ -30,10 +34,19 @@ class List extends React.Component<IListProps> {
     }
 
     public componentDidMount() {
-        this.props.onLoadState();
+        // this.props.onLoadState();
+        this.props.onFetchState();
     }
 
     public render() {
+        if (this.props.error) {
+            return <p>ERROR</p>;
+        }
+
+        if (this.props.loading) {
+            return <Loading />;
+        }
+
         return (
             <div className="list">
                 <InputForm
@@ -64,16 +77,19 @@ class List extends React.Component<IListProps> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-    items: state.list.items
+    items: state.list.items,
+    loading: state.list.loading,
+    error: state.list.error,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<ListActionTypes>) => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
     return {
         onAddItem: (item: IListItem) => dispatch(addItem(item)),
         onDeleteItem: (item: IListItem) => dispatch(deleteItem(item)),
         onResetAll: () => dispatch(resetAll()),
         onSaveState: () => dispatch(saveState()),
         onLoadState: () => dispatch(loadState()),
+        onFetchState: () => dispatch(fetchState()),
     }
 }
 
