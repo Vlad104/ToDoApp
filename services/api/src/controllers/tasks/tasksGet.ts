@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes';
 
 import { TaskService } from '../../services/TaskService';
 
-export default async function(req: Request, res: Response, next: NextFunction) {
+export default async function taskGet(req: Request, res: Response, next: NextFunction) {
     const taskService = new TaskService();
 
     try {

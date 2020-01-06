@@ -9,6 +9,6 @@ export class Task {
   @Column()
   public text: string;
 
-  @CreateDateColumn()
-  public created: Date;
+  @CreateDateColumn({ type: 'timestamp' })
+  public created: string;
 }

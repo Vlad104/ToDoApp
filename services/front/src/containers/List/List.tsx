@@ -3,7 +3,11 @@ import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux';
 
 import { IListItem, ListActionTypes } from '../../store/List/types';
-import { addItem, deleteItem, resetAll, saveState, loadState, fetchState } from '../../store/List/actions';
+import {
+    addItem, deleteItem, resetAll,
+    saveState, loadState, fetchState,
+    createTask
+} from '../../store/List/actions';
 import { AppState } from '../../store/index';
 
 import { InputForm } from '../../components/InputForm/InputForm';
@@ -22,6 +26,7 @@ interface IListProps {
     onSaveState: typeof saveState;
     onLoadState: typeof loadState;
     onFetchState: () => Promise<void>;
+    onCreateTask: (item: IListItem) => Promise<void>;
 }
 
 class List extends React.Component<IListProps> {
@@ -66,7 +71,8 @@ class List extends React.Component<IListProps> {
     }
 
     private onAddItem = (text: string) => {
-        this.props.onAddItem({ text });
+        // this.props.onAddItem({ text });
+        this.props.onCreateTask({ text });
     }
 
     private onDelete = (index: number) => {
@@ -90,6 +96,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) =>
         onSaveState: () => dispatch(saveState()),
         onLoadState: () => dispatch(loadState()),
         onFetchState: () => dispatch(fetchState()),
+        onCreateTask: (item: IListItem) => dispatch(createTask(item)),
     }
 }
 

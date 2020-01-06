@@ -4,7 +4,7 @@
   "description": "## Using: * TypeScript * React * Redux",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm --prefix ./services/api start & npm --prefix ./services/front start"
   },
   "repository": {
     "type": "git",

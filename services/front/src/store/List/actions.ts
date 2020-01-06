@@ -75,3 +75,23 @@ export function fetchState(url = 'http://localhost:8080/tasks'): ThunkAction<Pro
             .catch(() => dispatch(stateError(true)));
     };
 }
+
+
+
+export function createTask(item: IListItem, url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+    return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
+        dispatch(addItem(item));
+        
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(item)
+        };
+
+        console.log(options.body);
+
+        fetch(url, options).catch(() => dispatch(stateError(true)));
+    };
+}
