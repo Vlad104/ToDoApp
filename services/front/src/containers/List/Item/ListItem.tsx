@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { IListItem } from '../../../store/List/types';
+import { ITask } from '../../../store/List/types';
 import './ListItem.css';
 
-interface IListItemProps {
-    item: IListItem;
+interface ITaskProps {
+    item: ITask;
     onClick: () => void;
 }
 
-export const ListItem: React.FC<IListItemProps> = (props: IListItemProps) => {
+export const ListItem: React.FC<ITaskProps> = (props: ITaskProps) => {
     return (
         <div className="list-item">
             <a

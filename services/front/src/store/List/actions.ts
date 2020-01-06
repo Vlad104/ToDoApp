@@ -1,22 +1,21 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
 import {
-    IListItem, ADD_ITEM,
-    DELETE_ITEM, RESET_ALL, SAVE_STATE,
-    LOAD_STATE, FETCH_STATE, LOADING_STATE,
-    ERROR_STATE, ListActionTypes
+    ITask, ADD_TASK,
+    DELETE_TASK, RESET_ALL, FETCH_TASKS,
+    LOADING, FETCH_ERROR, ListActionTypes
 } from './types';
 
-export function addItem(item: IListItem): ListActionTypes {
+export function addTask(item: ITask): ListActionTypes {
     return {
-        type: ADD_ITEM,
+        type: ADD_TASK,
         item
     }
 }
 
-export function deleteItem(item: IListItem): ListActionTypes {
+export function deleteItem(item: ITask): ListActionTypes {
     return {
-        type: DELETE_ITEM,
+        type: DELETE_TASK,
         item
     }
 }
@@ -27,40 +26,28 @@ export function resetAll(): ListActionTypes {
     }
 }
 
-export function saveState(): ListActionTypes {
-    return {
-        type: SAVE_STATE
-    }
-}
-
-export function loadState(): ListActionTypes {
-    return {
-        type: LOAD_STATE
-    }
-}
-
 export function stateError(bool: boolean): ListActionTypes {
     return {
-        type: ERROR_STATE,
+        type: FETCH_ERROR,
         error: bool
     };
 }
 
 export function stateLoading(bool: boolean): ListActionTypes {
     return {
-        type: LOADING_STATE,
+        type: LOADING,
         loading: bool
     };
 }
 
-export function stateFetchSuccess(items: IListItem[]): ListActionTypes {
+export function stateFetchSuccess(items: ITask[]): ListActionTypes {
     return {
-        type: FETCH_STATE,
+        type: FETCH_TASKS,
         items
     };
 }
 
-export function fetchState(url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+export function fetchTasks(url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
     return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
         dispatch(stateLoading(true));
 
@@ -70,17 +57,15 @@ export function fetchState(url = 'http://localhost:8080/tasks'): ThunkAction<Pro
                 
                 return response.json();
             })
-            .then((items) => items.map((item: IListItem) => ({ text: item.text })))
+            .then((items) => items.map((item: ITask) => ({ text: item.text })))
             .then((items) => dispatch(stateFetchSuccess(items)))
             .catch(() => dispatch(stateError(true)));
     };
 }
 
-
-
-export function createTask(item: IListItem, url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+export function createTask(item: ITask, url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
     return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
-        dispatch(addItem(item));
+        dispatch(addTask(item));
         
         const options = {
             method: 'POST',

@@ -2,11 +2,10 @@ import React from 'react';
 import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux';
 
-import { IListItem, ListActionTypes } from '../../store/List/types';
+import { ITask, ListActionTypes } from '../../store/List/types';
 import {
-    addItem, deleteItem, resetAll,
-    saveState, loadState, fetchState,
-    createTask
+    deleteItem, resetAll,
+    fetchTasks, createTask
 } from '../../store/List/actions';
 import { AppState } from '../../store/index';
 
@@ -17,30 +16,19 @@ import { ListItem } from './Item/ListItem';
 import './List.css';
 
 interface IListProps {
-    items: IListItem[];
-    error: boolean;
+    items: ITask[];
     loading: boolean;
-    onAddItem: typeof addItem;
+    error: boolean;
     onDeleteItem: typeof deleteItem;
     onResetAll: typeof resetAll;
-    onSaveState: typeof saveState;
-    onLoadState: typeof loadState;
-    onFetchState: () => Promise<void>;
-    onCreateTask: (item: IListItem) => Promise<void>;
+    onFetchTasks: () => Promise<void>;
+    onCreateTask: (item: ITask) => Promise<void>;
 }
 
 class List extends React.Component<IListProps> {
-    constructor(props: IListProps) {
-        super(props);
-        window.addEventListener("beforeunload", (ev) => {
-            ev.preventDefault();
-            this.props.onSaveState();
-        });
-    }
 
     public componentDidMount() {
-        // this.props.onLoadState();
-        this.props.onFetchState();
+        this.props.onFetchTasks();
     }
 
     public render() {
@@ -56,7 +44,7 @@ class List extends React.Component<IListProps> {
             <div className="list">
                 <InputForm
                     placeholder="Enter new task ..."
-                    onSave={this.onAddItem}
+                    onSave={this.onaddTask}
                     onReset={this.props.onResetAll}
                 />
                 {this.props.items.map((item, index) =>
@@ -70,8 +58,7 @@ class List extends React.Component<IListProps> {
         )
     }
 
-    private onAddItem = (text: string) => {
-        // this.props.onAddItem({ text });
+    private onaddTask = (text: string) => {
         this.props.onCreateTask({ text });
     }
 
@@ -90,13 +77,10 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
     return {
-        onAddItem: (item: IListItem) => dispatch(addItem(item)),
-        onDeleteItem: (item: IListItem) => dispatch(deleteItem(item)),
+        onDeleteItem: (item: ITask) => dispatch(deleteItem(item)),
         onResetAll: () => dispatch(resetAll()),
-        onSaveState: () => dispatch(saveState()),
-        onLoadState: () => dispatch(loadState()),
-        onFetchState: () => dispatch(fetchState()),
-        onCreateTask: (item: IListItem) => dispatch(createTask(item)),
+        onFetchTasks: () => dispatch(fetchTasks()),
+        onCreateTask: (item: ITask) => dispatch(createTask(item)),
     }
 }
 

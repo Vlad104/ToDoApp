@@ -1,18 +1,18 @@
-import { IListState, ListActionTypes, ADD_ITEM, DELETE_ITEM, RESET_ALL, SAVE_STATE, LOAD_STATE, FETCH_STATE, LOADING_STATE, ERROR_STATE } from './types';
+import { IListTask, ListActionTypes, ADD_TASK, DELETE_TASK, RESET_ALL, FETCH_TASKS, LOADING, FETCH_ERROR } from './types';
 
-const initialState: IListState = {
+const initialState: IListTask = {
     items: [],
     loading: true,
     error: false,
 }
 
-export function listReducer(state = initialState, action: ListActionTypes) : IListState {
+export function listReducer(state = initialState, action: ListActionTypes) : IListTask {
     switch (action.type) {
-        case ADD_ITEM:
+        case ADD_TASK:
             return Object.assign({}, state, {
                 items: [...state.items, action.item]
             })
-        case DELETE_ITEM:
+        case DELETE_TASK:
             return Object.assign({}, state, {
                 items: state.items.filter((item) => item.text !== action.item.text)
             })
@@ -20,26 +20,13 @@ export function listReducer(state = initialState, action: ListActionTypes) : ILi
             return Object.assign({}, state, {
                 items: []
             })
-        case SAVE_STATE:
-            localSave(state);
-            return state;
-        case LOAD_STATE:
-            return localLoad();
-        case FETCH_STATE:
+        case FETCH_TASKS:
             return Object.assign({}, state, { items: action.items });
-        case LOADING_STATE:
+        case LOADING:
             return Object.assign({}, state, { loading: action.loading });
-        case ERROR_STATE:
+        case FETCH_ERROR:
             return Object.assign({}, state, { error: action.error });
         default:
             return state
     }
-}
-
-function localSave(state: IListState) {
-    localStorage.list = JSON.stringify(state);
-}
-
-function localLoad() {
-    return localStorage.list ? JSON.parse(localStorage.list) : initialState;
 }
