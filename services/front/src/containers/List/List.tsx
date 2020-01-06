@@ -1,11 +1,12 @@
 import React from 'react';
 import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { ITask, ListActionTypes } from '../../store/List/types';
 import {
-    deleteItem, resetAll,
-    fetchTasks, createTask
+    fetchTasks, createTask, deleteTask,
+    deleteAllTasks
 } from '../../store/List/actions';
 import { AppState } from '../../store/index';
 
@@ -19,10 +20,10 @@ interface IListProps {
     items: ITask[];
     loading: boolean;
     error: boolean;
-    onDeleteItem: typeof deleteItem;
-    onResetAll: typeof resetAll;
     onFetchTasks: () => Promise<void>;
     onCreateTask: (item: ITask) => Promise<void>;
+    onDeleteTask: (item: ITask) => Promise<void>;
+    onDeleteAllTasks: () => Promise<void>;
 }
 
 class List extends React.Component<IListProps> {
@@ -44,27 +45,29 @@ class List extends React.Component<IListProps> {
             <div className="list">
                 <InputForm
                     placeholder="Enter new task ..."
-                    onSave={this.onaddTask}
-                    onReset={this.props.onResetAll}
+                    onSave={this.onAddTask}
+                    onReset={this.props.onDeleteAllTasks}
                 />
-                {this.props.items.map((item, index) =>
+                {this.props.items.map((item) =>
                     <ListItem
-                        key={index}
+                        key={item.id}
                         item={item}
-                        onClick={this.onDelete(index)}
+                        onClick={this.onDelete(item)}
                     />
                 )}
             </div>
         )
     }
 
-    private onaddTask = (text: string) => {
-        this.props.onCreateTask({ text });
+    private onAddTask = (text: string) => {
+        const id = this.props.items[0] ? this.props.items[0].id + 1 : 1;
+        const created = moment().format();
+        this.props.onCreateTask({ id, text, created });
     }
 
-    private onDelete = (index: number) => {
+    private onDelete = (item: ITask) => {
         return () => {
-            this.props.onDeleteItem(this.props.items[index])
+            this.props.onDeleteTask(item)
         }
     }
 }
@@ -77,10 +80,10 @@ const mapStateToProps = (state: AppState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
     return {
-        onDeleteItem: (item: ITask) => dispatch(deleteItem(item)),
-        onResetAll: () => dispatch(resetAll()),
         onFetchTasks: () => dispatch(fetchTasks()),
         onCreateTask: (item: ITask) => dispatch(createTask(item)),
+        onDeleteTask: (item: ITask) => dispatch(deleteTask(item)),
+        onDeleteAllTasks: () => dispatch(deleteAllTasks()),
     }
 }
 

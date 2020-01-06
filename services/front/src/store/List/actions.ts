@@ -57,7 +57,6 @@ export function fetchTasks(url = 'http://localhost:8080/tasks'): ThunkAction<Pro
                 
                 return response.json();
             })
-            .then((items) => items.map((item: ITask) => ({ text: item.text })))
             .then((items) => dispatch(stateFetchSuccess(items)))
             .catch(() => dispatch(stateError(true)));
     };
@@ -75,7 +74,29 @@ export function createTask(item: ITask, url = 'http://localhost:8080/tasks'): Th
             body: JSON.stringify(item)
         };
 
-        console.log(options.body);
+        fetch(url, options).catch(() => dispatch(stateError(true)));
+    };
+}
+
+export function deleteTask(item: ITask, url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+    return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
+        dispatch(deleteItem(item));
+        
+        const options = {
+            method: 'DELETE',
+        };
+
+        fetch(`${url}/${item.id}`, options).catch(() => dispatch(stateError(true)));
+    };
+}
+
+export function deleteAllTasks(url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+    return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
+        dispatch(resetAll());
+        
+        const options = {
+            method: 'DELETE',
+        };
 
         fetch(url, options).catch(() => dispatch(stateError(true)));
     };

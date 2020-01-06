@@ -3,18 +3,15 @@ import * as HttpStatus from 'http-status-codes';
 
 import { TaskService } from '../../services/TaskService';
 
-export default async function taskPost(req: Request, res: Response, next: NextFunction) {
+export default async function taskDelete(req: Request, res: Response, next: NextFunction) {
+    const taskId = parseInt(req.params.id, 10);
+
     const taskService = new TaskService();
 
-    const task = req.body;
-    if (task.id) {
-        delete task.id;
-    }
-
     try {
-        const response = await taskService.insert(task);
+        await taskService.deleteById(taskId);
 
-        res.status(HttpStatus.OK).json(response);
+        res.sendStatus(HttpStatus.OK);
     } catch (err) {
         console.error(err);
         const error = {

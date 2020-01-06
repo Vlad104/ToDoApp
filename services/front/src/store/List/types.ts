@@ -1,5 +1,7 @@
 export interface ITask {
+    id: number;
     text: string;
+    created: string;
 }
 
 export interface IListTask {

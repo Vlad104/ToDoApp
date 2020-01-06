@@ -47,4 +47,20 @@ export class TaskService {
         return Promise.reject(error);
     }
   }
+
+  public async deleteById(taskId: number): Promise<void> {
+    try {
+        await this.taskRepository.delete(taskId);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+  }
+
+  public async deleteAll(): Promise<void> {
+    try {
+        await this.taskRepository.clear();
+    } catch (error) {
+        return Promise.reject(error);
+    }
+  }
 }
