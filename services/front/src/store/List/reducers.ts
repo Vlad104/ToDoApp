@@ -1,4 +1,8 @@
-import { IListTask, ListActionTypes, ADD_TASK, DELETE_TASK, RESET_ALL, FETCH_TASKS, LOADING, FETCH_ERROR } from './types';
+import {
+    IListTask, ListActionTypes, ADD_TASK,
+    DELETE_TASK, RESET_ALL, FETCH_TASKS,
+    LOADING, FETCH_ERROR
+} from './types';
 
 const initialState: IListTask = {
     items: [],

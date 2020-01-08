@@ -1,4 +1,10 @@
 import React from 'react';
+import { ThunkDispatch } from 'redux-thunk'
+import { connect } from 'react-redux';
+
+import { IUser, UserActionTypes } from '../../store/User/types';
+import { signIn } from '../../store/User/actions';
+import { AppState } from '../../store/index';
 
 import { Modal } from '../../components/Modal/Modal';
 import { Input } from '../../components/Input/Input';
@@ -7,7 +13,9 @@ import { Button } from '../../components/Button/Button';
 import './SignModal.css';
 
 interface ISignModalProps {
-
+    user: IUser;
+    error: boolean;
+    onSignIn: (login: string, password: string) => Promise<void>;
 }
 
 interface ISignModalState {
@@ -16,7 +24,7 @@ interface ISignModalState {
     password: string;
 }
 
-export default class SignModal extends React.Component<ISignModalProps, ISignModalState> {
+class SignModal extends React.Component<ISignModalProps, ISignModalState> {
     constructor(props: ISignModalProps) {
         super(props);
 
@@ -60,7 +68,7 @@ export default class SignModal extends React.Component<ISignModalProps, ISignMod
                 />
                 <Button
                     text="Войти"
-                    onClick={() => true}
+                    onClick={this.onSubmit}
                 />
             </div>
         );
@@ -85,4 +93,30 @@ export default class SignModal extends React.Component<ISignModalProps, ISignMod
     private onClose = () => {
         this.setState({ isOpen: false });
     }
+
+    private onSubmit = async () => {
+        try {
+            await this.props.onSignIn(this.state.login, this.state.password);
+            if (this.props.error) {
+                throw new Error('Sign in error');
+            }
+
+            this.setState({ isOpen: false });
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }
+
+const mapStateToProps = (state: AppState) => ({
+    user: state.user.user,
+    error: state.user.error,
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
+    return {
+        onSignIn: (login: string, password: string) => dispatch(signIn(login, password)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignModal);
