@@ -16,7 +16,25 @@ export function signInError(error: Error): UserActionTypes {
     }
 }
 
-export function signIn(login: string, password: string, url = 'http://localhost:8080/users'): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
+export function signIn(login: string, password: string, url = 'http://localhost:8080/users/signin'): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
+    return async (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
+        const user = { login, password };
+        
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        };
+        
+        fetch(url, options)
+            .then(() => dispatch(signInOk(user)))
+            .catch((err) => dispatch(signInError(err)));
+    }
+}
+
+export function signUp(login: string, password: string, url = 'http://localhost:8080/users/signup'): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
     return async (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
         const user = { login, password };
         

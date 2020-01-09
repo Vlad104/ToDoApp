@@ -21,6 +21,6 @@ export default async function taskPost(req: Request, res: Response, next: NextFu
             code: HttpStatus.BAD_REQUEST,
             errorObj: err
         };
-        next(error);
+        return next(error);
     }
 }

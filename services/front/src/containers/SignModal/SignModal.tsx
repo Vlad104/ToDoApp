@@ -3,7 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { connect } from 'react-redux';
 
 import { IUser, UserActionTypes } from '../../store/User/types';
-import { signIn } from '../../store/User/actions';
+import { signIn, signUp } from '../../store/User/actions';
 import { AppState } from '../../store/index';
 
 import { Modal } from '../../components/Modal/Modal';
@@ -12,10 +12,17 @@ import { Button } from '../../components/Button/Button';
 
 import './SignModal.css';
 
+enum FormType {
+    SIGNIN = 'SIGNIN',
+    SIGNUP = 'SIGNUP',
+};
+
 interface ISignModalProps {
     user: IUser;
     error: boolean;
     onSignIn: (login: string, password: string) => Promise<void>;
+    onSignUp: (login: string, password: string) => Promise<void>;
+    formType: FormType;
 }
 
 interface ISignModalState {
@@ -25,6 +32,10 @@ interface ISignModalState {
 }
 
 class SignModal extends React.Component<ISignModalProps, ISignModalState> {
+    static defaultProps = {
+        formType: FormType.SIGNIN,
+    }
+
     constructor(props: ISignModalProps) {
         super(props);
 
@@ -66,12 +77,27 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
                     onReset={this.onResetPassword}
                     onSave={() => true}
                 />
-                <Button
-                    text="Войти"
-                    onClick={this.onSubmit}
-                />
+                {this.renderSubmitButton()}
             </div>
         );
+    }
+
+    private renderSubmitButton() {
+        if (this.props.formType === FormType.SIGNIN) {
+            return (
+                <Button
+                    text="Войти"
+                    onClick={this.onClickSignIn}
+                />
+            );
+        } else {
+            return (
+                <Button
+                    text="Регистрация"
+                    onClick={this.onClickSignUp}
+                />
+            );
+        }
     }
 
     private onChangeLogin = (value: string) => {
@@ -94,9 +120,22 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
         this.setState({ isOpen: false });
     }
 
-    private onSubmit = async () => {
+    private onClickSignIn = async () => {
         try {
             await this.props.onSignIn(this.state.login, this.state.password);
+            if (this.props.error) {
+                throw new Error('Sign in error');
+            }
+
+            this.setState({ isOpen: false });
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    private onClickSignUp = async () => {
+        try {
+            await this.props.onSignUp(this.state.login, this.state.password);
             if (this.props.error) {
                 throw new Error('Sign in error');
             }
@@ -116,6 +155,7 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
     return {
         onSignIn: (login: string, password: string) => dispatch(signIn(login, password)),
+        onSignUp: (login: string, password: string) => dispatch(signUp(login, password)),
     }
 }
 

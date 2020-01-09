@@ -16,6 +16,6 @@ export default async function tasksDelete(req: Request, res: Response, next: Nex
             code: HttpStatus.BAD_REQUEST,
             errorObj: err
         };
-        next(error);
+        return next(error);
     }
 }

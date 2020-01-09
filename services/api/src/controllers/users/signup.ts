@@ -4,32 +4,19 @@ import * as HttpStatus from 'http-status-codes';
 
 import { UserService } from '../../services/UserService';
 
-export default async function signin(req: Request, res: Response, next: NextFunction) {
-    const { body: { login, password } } = req;
+export default async function signup(req: Request, res: Response, next: NextFunction) {
+    const { body: user } = req;
 
     const userService = new UserService();
 
     try {
-        const user = await userService.getByLogin(login);
+        await userService.insert(user);
         if (!user) {
             res.status(HttpStatus.BAD_REQUEST).json({
-                message: `user not found`,
+                message: `user create error`,
             });
 
             return;
-        }
-
-        const isCorrect = await bcrypt.compare(password, user.password);
-
-        if (!isCorrect) {
-            const err = {
-                code: HttpStatus.UNAUTHORIZED,
-                errorObj: {
-                    message: 'incorrect password',
-                },
-            };
-
-            return next(err);
         }
 
         res.sendStatus(HttpStatus.OK);

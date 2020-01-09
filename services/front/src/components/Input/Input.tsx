@@ -17,7 +17,7 @@ export class Input extends React.Component<IInputProps> {
         type: "text",
     };
 
-    render() {
+    public render() {
         return (
             <div className={`${this.props.className} input`}>
                 <input
