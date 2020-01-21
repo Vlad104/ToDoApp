@@ -6,3 +6,16 @@
 .sign-modal__field {
     margin-bottom: 0.6rem;
 }
+
+.sign-modal__header {
+    margin-right: 0.2rem;
+    color: var(--darkMainColor);
+}
+
+.sign-modal__header:hover {
+    color: var(--mainColor);
+}
+
+.sign-modal__header_active {
+    color: var(--mainColor);
+}

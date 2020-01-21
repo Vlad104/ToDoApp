@@ -19,42 +19,68 @@ enum FormType {
 
 interface ISignModalProps {
     user: IUser;
+    isAuth: boolean;
     error: boolean;
     onSignIn: (login: string, password: string) => Promise<void>;
     onSignUp: (login: string, password: string) => Promise<void>;
-    formType: FormType;
 }
 
 interface ISignModalState {
-    isOpen: boolean;
     login: string;
     password: string;
+    formType: FormType;
 }
 
 class SignModal extends React.Component<ISignModalProps, ISignModalState> {
-    static defaultProps = {
-        formType: FormType.SIGNIN,
-    }
-
     constructor(props: ISignModalProps) {
         super(props);
 
         this.state = {
-            isOpen: true,
             login: '',
-            password: ''
+            password: '',
+            formType: FormType.SIGNIN,
         };
     }
 
     public render() {
         return (
             <Modal
-              isOpen={this.state.isOpen}
-              header="Войти"
-              body={this.renderBody()}
-              onClose={this.onClose}
+                isOpen={!this.props.isAuth}
+                header={this.renderHeader()}
+                body={this.renderBody()}
+                onClose={this.onClose}
             />
         );
+    }
+
+    private renderHeader() {
+        const activeStyle = `sign-modal__header sign-modal__header_active`;
+        const nonActiveStyle = `sign-modal__header`;
+
+        return (
+            <>
+                <span
+                    className={this.state.formType === FormType.SIGNIN ? activeStyle : nonActiveStyle}
+                    onClick={this.changeFormType(FormType.SIGNIN)}
+                >
+                    Вход
+                </span>
+                <span
+                    className={this.state.formType === FormType.SIGNUP ? activeStyle : nonActiveStyle}
+                    onClick={this.changeFormType(FormType.SIGNUP)}
+                >
+                    Регистрация
+                </span>
+            </>
+        );
+    }
+
+    private changeFormType = (formType: FormType) => {
+        return () => {
+            this.setState({
+                formType
+            });
+        }
     }
 
     private renderBody() {
@@ -83,7 +109,7 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
     }
 
     private renderSubmitButton() {
-        if (this.props.formType === FormType.SIGNIN) {
+        if (this.state.formType === FormType.SIGNIN) {
             return (
                 <Button
                     text="Войти"
@@ -117,38 +143,21 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
     }
 
     private onClose = () => {
-        this.setState({ isOpen: false });
+        return true;
     }
 
-    private onClickSignIn = async () => {
-        try {
-            await this.props.onSignIn(this.state.login, this.state.password);
-            if (this.props.error) {
-                throw new Error('Sign in error');
-            }
-
-            this.setState({ isOpen: false });
-        } catch (err) {
-            console.log(err);
-        }
+    private onClickSignIn = () => {
+        this.props.onSignIn(this.state.login, this.state.password);
     }
 
-    private onClickSignUp = async () => {
-        try {
-            await this.props.onSignUp(this.state.login, this.state.password);
-            if (this.props.error) {
-                throw new Error('Sign in error');
-            }
-
-            this.setState({ isOpen: false });
-        } catch (err) {
-            console.log(err);
-        }
+    private onClickSignUp = () => {
+        this.props.onSignUp(this.state.login, this.state.password);
     }
 }
 
 const mapStateToProps = (state: AppState) => ({
     user: state.user.user,
+    isAuth: state.user.isAuth,
     error: state.user.error,
 });
 

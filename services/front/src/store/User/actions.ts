@@ -1,6 +1,7 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { IUser, SIGNIN_OK, SIGNIN_ERROR, UserActionTypes } from './types';
+import userService from '../../services/UserService';
 
 export function signInOk(user: IUser): UserActionTypes {
     return {
@@ -16,38 +17,26 @@ export function signInError(error: Error): UserActionTypes {
     }
 }
 
-export function signIn(login: string, password: string, url = 'http://localhost:8080/users/signin'): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
+export function signIn(login: string, password: string): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
     return async (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
-        const user = { login, password };
-        
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user)
-        };
-        
-        fetch(url, options)
-            .then(() => dispatch(signInOk(user)))
-            .catch((err) => dispatch(signInError(err)));
+        try {
+            console.log({ login, password });
+            await userService.signIn(login, password);
+            console.log({ login, password });
+            dispatch(signInOk({ login, password }))
+        } catch(err) {
+            dispatch(signInError(err));
+        }
     }
 }
 
-export function signUp(login: string, password: string, url = 'http://localhost:8080/users/signup'): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
+export function signUp(login: string, password: string): ThunkAction<Promise<void>, {}, {}, UserActionTypes>{
     return async (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
-        const user = { login, password };
-        
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user)
-        };
-        
-        fetch(url, options)
-            .then(() => dispatch(signInOk(user)))
-            .catch((err) => dispatch(signInError(err)));
+        try {
+            await userService.signUp(login, password);
+            dispatch(signInOk({ login, password }))
+        } catch(err) {
+            dispatch(signInError(err));
+        }
     }
 }

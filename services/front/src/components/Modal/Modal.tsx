@@ -5,7 +5,7 @@ import './Modal.css';
 
 interface IModalProps {
     isOpen: boolean;
-    header: string;
+    header: React.ReactNode;
     body: React.ReactNode;
     footer?: React.ReactNode;
     onClose: () => void;

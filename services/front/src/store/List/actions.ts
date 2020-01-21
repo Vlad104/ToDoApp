@@ -5,6 +5,7 @@ import {
     DELETE_TASK, RESET_ALL, FETCH_TASKS,
     LOADING, FETCH_ERROR, ListActionTypes
 } from './types';
+import taskService from '../../services/TaskService';
 
 export function addTask(item: ITask): ListActionTypes {
     return {
@@ -47,57 +48,52 @@ export function stateFetchSuccess(items: ITask[]): ListActionTypes {
     };
 }
 
-export function fetchTasks(url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+export function fetchTasks(): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
     return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
         dispatch(stateLoading(true));
 
-        fetch(url)
-            .then((response) => {
-                dispatch(stateLoading(false));
-                
-                return response.json();
-            })
-            .then((items) => dispatch(stateFetchSuccess(items)))
-            .catch(() => dispatch(stateError(true)));
+        try {
+            const tasks = await taskService.fetch();
+            dispatch(stateLoading(false));
+            stateFetchSuccess(tasks);
+        } catch (err) {
+            dispatch(stateError(true));
+        }
     };
 }
 
-export function createTask(item: ITask, url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+export function createTask(item: ITask): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
     return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
         dispatch(addTask(item));
-        
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(item)
-        };
 
-        fetch(url, options).catch(() => dispatch(stateError(true)));
+        try {
+            await taskService.create(item);
+        } catch (err) {
+            dispatch(stateError(true));
+        }
     };
 }
 
-export function deleteTask(item: ITask, url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+export function deleteTask(item: ITask): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
     return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
         dispatch(deleteItem(item));
         
-        const options = {
-            method: 'DELETE',
-        };
-
-        fetch(`${url}/${item.id}`, options).catch(() => dispatch(stateError(true)));
+        try {
+            await taskService.delete(item);
+        } catch (err) {
+            dispatch(stateError(true));
+        }
     };
 }
 
-export function deleteAllTasks(url = 'http://localhost:8080/tasks'): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
+export function deleteAllTasks(): ThunkAction<Promise<void>, {}, {}, ListActionTypes> {
     return async (dispatch: ThunkDispatch<{}, {}, ListActionTypes>) => {
         dispatch(resetAll());
         
-        const options = {
-            method: 'DELETE',
-        };
-
-        fetch(url, options).catch(() => dispatch(stateError(true)));
+        try {
+            await taskService.deleteAll();
+        } catch (err) {
+            dispatch(stateError(true));
+        }
     };
 }

@@ -8,6 +8,7 @@ const initialState: IUserAuth = {
         login: 'Unregistered',
         password: '',
     },
+    isAuth: false,
     error: false,
 }
 
@@ -16,10 +17,12 @@ export function userReducer(state = initialState, action: UserActionTypes): IUse
         case SIGNIN_OK:
             return {
                 user: action.user,
+                isAuth: true,
                 error: false
             };
         case SIGNIN_ERROR:
             return Object.assign({}, initialState, {
+                isAuth: false,
                 error: true
             });
         default:

@@ -5,6 +5,7 @@ export interface IUser {
 
 export interface IUserAuth {
     user: IUser;
+    isAuth: boolean;
     error: boolean;
 }
 
