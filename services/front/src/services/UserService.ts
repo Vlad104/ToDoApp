@@ -1,7 +1,7 @@
 import request from '../modules/request';
 
 class UserService {
-    private readonly URL = 'http://localhost:8080/users';
+    private readonly URL = 'http://localhost:8080/auth';
 
     public async signIn(login: string, password: string) {
         const user = { login, password };
