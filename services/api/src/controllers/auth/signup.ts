@@ -22,7 +22,7 @@ export default async function signup(req: Request, res: Response, next: NextFunc
 
         const sessionService = new SessionService();
         const session = await sessionService.insert({ user });
-        res.cookie('sessionId', session.id, { maxAge: 60, httpOnly: true });
+        res.cookie('sessionId', session.id, { maxAge: 60 * 60 * 1000, httpOnly: true });
         res.sendStatus(HttpStatus.OK);
 
         res.sendStatus(HttpStatus.OK);

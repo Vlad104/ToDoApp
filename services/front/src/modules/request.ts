@@ -4,6 +4,8 @@ export default async function request(url: string, method: string = 'GET', body?
         headers: {
             'Content-Type': 'application/json',
         },
+        mode: 'cors' as RequestMode,
+        credentials: 'include' as RequestCredentials,
         body: body ? JSON.stringify(body) : null,
     };
 

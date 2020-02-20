@@ -1,9 +1,10 @@
 export const config = {
     corsOptions: {
+        credentials: true,
         origin: checkOrigin([
             'http://localhost:3000',
         ]),
-    }
+    },
 };
 
 function checkOrigin(whiteList: string[]) {
