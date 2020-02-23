@@ -55,7 +55,7 @@ export function fetchTasks(): ThunkAction<Promise<void>, {}, {}, ListActionTypes
         try {
             const tasks = await taskService.fetch();
             dispatch(stateLoading(false));
-            stateFetchSuccess(tasks);
+            dispatch(stateFetchSuccess(tasks));
         } catch (err) {
             dispatch(stateError(true));
         }

@@ -11,6 +11,9 @@ export default async function taskPost(req: Request, res: Response, next: NextFu
         delete task.id;
     }
 
+    const { user } = res.locals.session;
+    task.user = user;
+
     try {
         const response = await taskService.insert(task);
 

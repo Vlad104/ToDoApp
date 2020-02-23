@@ -11,18 +11,18 @@ export class SessionService {
     }
 
     // tslint:disable-next-line: ban-types
-    public async insert(data: Object): Promise<Session> {
-        const newUser = this.sessionRepository.create(data);
-        return await this.sessionRepository.save(newUser);
+    public async insert(userData: Object): Promise<Session> {
+        const session = this.sessionRepository.create(userData);
+        return await this.sessionRepository.save(session);
     }
 
     public async get(sessionId: string): Promise<Session> {
-        return await this.sessionRepository.findOne(sessionId);
+        return await this.sessionRepository.findOne(sessionId, { relations: ['user'] });
     }
 
-    public async update(user: Session): Promise<Session | undefined> {
+    public async update(session: Session): Promise<Session | undefined> {
         try {
-            return await this.sessionRepository.save(user);
+            return await this.sessionRepository.save(session);
         } catch (error) {
             return Promise.reject(error);
         }

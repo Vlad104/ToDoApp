@@ -5,9 +5,10 @@ import { TaskService } from '../../services/TaskService';
 
 export default async function tasksDelete(req: Request, res: Response, next: NextFunction) {
     const taskService = new TaskService();
+    const { user } = res.locals.session;
 
     try {
-        await taskService.deleteAll();
+        await taskService.deleteAll(user);
 
         res.sendStatus(HttpStatus.OK);
     } catch (err) {

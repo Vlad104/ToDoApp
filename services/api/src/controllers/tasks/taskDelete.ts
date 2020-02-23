@@ -7,9 +7,10 @@ export default async function taskDelete(req: Request, res: Response, next: Next
     const taskId = parseInt(req.params.id, 10);
 
     const taskService = new TaskService();
+    const { user } = res.locals.session;
 
     try {
-        await taskService.deleteById(taskId);
+        await taskService.delete(user, taskId);
 
         res.sendStatus(HttpStatus.OK);
     } catch (err) {

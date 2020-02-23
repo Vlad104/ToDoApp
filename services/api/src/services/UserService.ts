@@ -18,7 +18,7 @@ export class UserService {
         return await this.userRepository.find();
     }
 
-    public async getByLogin(login: string): Promise<User> {
+    public async get(login: string): Promise<User> {
         if (login) {
             return await this.userRepository.findOne(login);
         }

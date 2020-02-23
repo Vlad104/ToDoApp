@@ -4,9 +4,9 @@ import * as HttpStatus from 'http-status-codes';
 import { SessionService } from '../../services/SessionService';
 
 export default async function session(req: Request, res: Response, next: NextFunction) {
-    const { cookies: sessionId } = req;
+    const { cookies } = req;
 
-    if (!sessionId) {
+    if (!cookies || !cookies.sessionId) {
         res.sendStatus(HttpStatus.UNAUTHORIZED);
 
         return;
@@ -15,7 +15,7 @@ export default async function session(req: Request, res: Response, next: NextFun
     const sessionService = new SessionService();
 
     try {
-        await sessionService.get(sessionId);
+        const a = await sessionService.get(cookies.sessionId);
         res.sendStatus(HttpStatus.OK);
     } catch (err) {
         res.sendStatus(HttpStatus.UNAUTHORIZED);

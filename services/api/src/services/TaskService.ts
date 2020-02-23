@@ -1,5 +1,6 @@
 import { getManager, Repository } from 'typeorm';
 import { Task } from '../entities/Task';
+import { User } from '../entities/User';
 
 export class TaskService {
 
@@ -19,20 +20,16 @@ export class TaskService {
     return await this.taskRepository.save(newTask);
   }
 
-  public async getAll(): Promise<Task[]> {
-    return await this.taskRepository.find();
+  public async getAll(user: User): Promise<Task[]> {
+    return await this.taskRepository.find({ where: { user } } );
   }
 
-  public async getById(id: string | number): Promise<Task> {
-    if (!id) {
-        return Promise.reject(false);
-    }
-
-    return await this.taskRepository.findOne(id);
+  public async get(user: User, id: string | number): Promise<Task> {
+    return await this.taskRepository.findOne(id, { where: { user } });
   }
 
-  public async getByText(text: string): Promise<Task | undefined> {
-    const tasks = await this.taskRepository.find({ where: { text } });
+  public async getByText(user: User, text: string): Promise<Task | undefined> {
+    const tasks = await this.taskRepository.find({ where: { user, text } });
     if (tasks && tasks.length > 0) {
         return tasks[0];
     } else {
@@ -48,17 +45,17 @@ export class TaskService {
     }
   }
 
-  public async deleteById(taskId: number): Promise<void> {
+  public async delete(user: User, taskId: number): Promise<void> {
     try {
-        await this.taskRepository.delete(taskId);
+        await this.taskRepository.delete({ id: taskId, user });
     } catch (error) {
         return Promise.reject(error);
     }
   }
 
-  public async deleteAll(): Promise<void> {
+  public async deleteAll(user: User): Promise<void> {
     try {
-        await this.taskRepository.clear();
+        await this.taskRepository.delete({ user });
     } catch (error) {
         return Promise.reject(error);
     }

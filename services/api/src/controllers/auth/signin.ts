@@ -11,7 +11,7 @@ export default async function signin(req: Request, res: Response, next: NextFunc
     const userService = new UserService();
 
     try {
-        const user = await userService.getByLogin(login);
+        const user = await userService.get(login);
         const isCorrect = await bcrypt.compare(password, user.password);
 
         if (!isCorrect) {

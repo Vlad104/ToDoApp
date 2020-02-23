@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity,  JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { User } from './User';
 
 @Entity('tasks')
 export class Task {
@@ -11,4 +13,9 @@ export class Task {
 
   @CreateDateColumn({ type: 'timestamp' })
   public created: string;
+
+  // tslint:disable-next-line: arrow-parens
+  @OneToOne(type => User)
+  @JoinColumn({ name: 'user' })
+  public user: User;
 }
