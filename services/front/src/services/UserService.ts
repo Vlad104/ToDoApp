@@ -4,7 +4,7 @@ class UserService {
     private readonly URL = 'http://localhost:8080/auth';
 
     public async checkSession() {
-        await request(`${this.URL}/session`);
+        return await request(`${this.URL}/session`);
     }
 
     public async signIn(login: string, password: string) {

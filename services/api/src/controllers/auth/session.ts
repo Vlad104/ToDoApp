@@ -15,8 +15,8 @@ export default async function session(req: Request, res: Response, next: NextFun
     const sessionService = new SessionService();
 
     try {
-        const a = await sessionService.get(cookies.sessionId);
-        res.sendStatus(HttpStatus.OK);
+        const currentSession = await sessionService.get(cookies.sessionId);
+        res.status(HttpStatus.OK).json(currentSession.user);
     } catch (err) {
         res.sendStatus(HttpStatus.UNAUTHORIZED);
     }

@@ -1,6 +1,10 @@
 import React from 'react';
+import { ThunkDispatch } from 'redux-thunk';
+import { connect } from 'react-redux';
 
-import userService from '../../services/UserService';
+import { IUser, UserActionTypes } from '../../store/User/types';
+import { session } from '../../store/User/actions';
+import { AppState } from '../../store/index';
 
 import Navbar from '../../containers/Navbar/Navbar';
 import List from '../../containers/List/List';
@@ -9,11 +13,13 @@ import SignModal from '../../containers/SignModal/SignModal';
 import './Main.css';
 
 interface IMainViewProps {
-  visits?: boolean;
+  user: IUser;
+  isAuth: boolean;
+  error: boolean;
+  onSession: () => Promise<void>;
 }
 
 interface IMainViewState {
-  auth: boolean;
   loading: boolean;
 }
 
@@ -21,16 +27,11 @@ export class MainView extends React.Component<IMainViewProps, IMainViewState> {
   constructor(props: IMainViewProps) {
     super(props);
 
-    this.state = { auth: false, loading: true };
+    this.state = { loading: true };
   }
 
   public async componentDidMount() {
-    try {
-      await userService.checkSession();
-      this.setState({ auth: true });
-    } catch(err) {
-      this.setState({ auth: false });
-    }
+    await this.props.onSession();
     this.setState({ loading: false });
   }
 
@@ -45,9 +46,21 @@ export class MainView extends React.Component<IMainViewProps, IMainViewState> {
 
   public renderContent() {
     return (
-      this.state.auth ? <List /> : <SignModal />
+      this.props.isAuth ? <List /> : <SignModal />
     );
   }
 }
 
-export default MainView;
+const mapStateToProps = (state: AppState) => ({
+  user: state.user.user,
+  isAuth: state.user.isAuth,
+  error: state.user.error,
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
+  return {
+      onSession: () => dispatch(session()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainView);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThunkDispatch } from 'redux-thunk'
+import { ThunkDispatch } from 'redux-thunk';
 import { connect } from 'react-redux';
 
 import { IUser, UserActionTypes } from '../../store/User/types';
