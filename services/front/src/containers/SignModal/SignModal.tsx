@@ -17,6 +17,11 @@ enum FormType {
     SIGNUP = 'SIGNUP',
 };
 
+enum AutoFocus {
+    LOGIN = 'LOGIN',
+    PASSWORD = 'PASSWORD',
+};
+
 interface ISignModalProps {
     user: IUser;
     isAuth: boolean;
@@ -29,9 +34,13 @@ interface ISignModalState {
     login: string;
     password: string;
     formType: FormType;
+    autoFocus: AutoFocus,
 }
 
 class SignModal extends React.Component<ISignModalProps, ISignModalState> {
+    private inputLoginRef = React.createRef<Input>();
+    private inputPasswordRef = React.createRef<Input>();
+
     constructor(props: ISignModalProps) {
         super(props);
 
@@ -39,6 +48,7 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
             login: '',
             password: '',
             formType: FormType.SIGNIN,
+            autoFocus: AutoFocus.LOGIN,
         };
     }
 
@@ -87,21 +97,23 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
         return (
             <div className="sign-modal">
                 <Input
+                    ref={this.inputLoginRef}
                     text={this.state.login}
                     placeholder="yourmail@same.com"
                     className="sign-modal__field"
                     onChange={this.onChangeLogin}
                     onReset={this.onResetLogin}
-                    onSave={() => true}
+                    onSave={this.focus(this.inputPasswordRef)}
                 />
                 <Input
+                    ref={this.inputPasswordRef}
                     text={this.state.password}
                     type="password"
                     placeholder="password"
                     className="sign-modal__field"
                     onChange={this.onChangePassword}
                     onReset={this.onResetPassword}
-                    onSave={() => true}
+                    onSave={this.signFormAction(this.state.formType)}
                 />
                 {this.renderSubmitButton()}
             </div>
@@ -109,21 +121,30 @@ class SignModal extends React.Component<ISignModalProps, ISignModalState> {
     }
 
     private renderSubmitButton() {
-        if (this.state.formType === FormType.SIGNIN) {
-            return (
-                <Button
-                    text="Войти"
-                    onClick={this.onClickSignIn}
-                />
-            );
-        } else {
-            return (
-                <Button
-                    text="Регистрация"
-                    onClick={this.onClickSignUp}
-                />
-            );
+        return (
+            <Button
+                text={this.signFormText(this.state.formType)}
+                onClick={this.signFormAction(this.state.formType)}
+            />
+        );
+    }
+
+    private focus = (ref: React.RefObject<Input>) => {
+        return () => {
+            ref.current?.focus();
         }
+    } 
+
+    private signFormText(type: FormType) {
+        return FormType.SIGNIN ? 'Вход' : 'Регистрация';
+    }
+
+    private signFormAction(type: FormType) {
+        return FormType.SIGNIN ? this.onClickSignIn : this.onClickSignUp;
+    }
+
+    private toogleInput = () => {
+        this.setState({ autoFocus: AutoFocus.PASSWORD });
     }
 
     private onChangeLogin = (value: string) => {

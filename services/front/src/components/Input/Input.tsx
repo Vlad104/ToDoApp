@@ -13,6 +13,8 @@ interface IInputProps {
 }
 
 export class Input extends React.Component<IInputProps> {
+    private ref = React.createRef<HTMLInputElement>();
+
     static defaultProps = {
         type: "text",
     };
@@ -21,8 +23,8 @@ export class Input extends React.Component<IInputProps> {
         return (
             <div className={`${this.props.className} input`}>
                 <input
+                    ref={this.ref}
                     type={this.props.type}
-                    autoFocus
                     value={this.props.text}
                     placeholder={this.props.placeholder}
                     className="input__text"
@@ -45,5 +47,9 @@ export class Input extends React.Component<IInputProps> {
         if (event.key === 'Enter') {
             this.props.onSave();
         }
+    }
+
+    public focus = () => {
+        this.ref.current?.focus();
     }
 }
