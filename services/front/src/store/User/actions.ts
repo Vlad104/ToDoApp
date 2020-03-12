@@ -1,8 +1,9 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import {
-    IUser, SESSION_OK, SESSION_ERROR,
-    SIGNIN_OK, SIGNIN_ERROR, UserActionTypes
+    IUser, SESSION_OK, SESSION_END,
+    SESSION_ERROR, SIGNIN_OK, SIGNIN_ERROR,
+    UserActionTypes
 } from './types';
 import userService from '../../services/UserService';
 
@@ -10,6 +11,12 @@ export function sessionOk(user: IUser): UserActionTypes {
     return {
         type: SESSION_OK,
         user
+    }
+}
+
+export function sessionEnd(): UserActionTypes {
+    return {
+        type: SESSION_END
     }
 }
 
@@ -60,6 +67,17 @@ export function signUp(login: string, password: string): ThunkAction<Promise<voi
         try {
             await userService.signUp(login, password);
             dispatch(signInOk({ login, password }))
+        } catch(err) {
+            dispatch(signInError(err));
+        }
+    }
+}
+
+export function signOut(): ThunkAction<Promise<void>, {}, {}, UserActionTypes> {
+    return async (dispatch: ThunkDispatch<{}, {}, UserActionTypes>) => {
+        try {
+            await userService.signOut();
+            dispatch(sessionEnd())
         } catch(err) {
             dispatch(signInError(err));
         }

@@ -18,6 +18,10 @@ class UserService {
 
         await request(`${this.URL}/signup`, 'POST', user);
     }
+
+    public async signOut() {
+        await request(`${this.URL}/session`, 'DELETE');
+    }
 }
 
 const userService = new UserService();

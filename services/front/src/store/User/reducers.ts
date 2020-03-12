@@ -1,6 +1,7 @@
 import {
     IUserAuth, UserActionTypes, SESSION_OK,
-    SESSION_ERROR, SIGNIN_OK, SIGNIN_ERROR
+    SESSION_END, SESSION_ERROR, SIGNIN_OK,
+    SIGNIN_ERROR
 } from './types';
 
 const initialState: IUserAuth = {
@@ -20,6 +21,11 @@ export function userReducer(state = initialState, action: UserActionTypes): IUse
                 isAuth: true,
                 error: false,
             }
+        case SESSION_END:
+            return Object.assign({}, initialState, {
+                isAuth: false,
+                error: false
+            });
         case SESSION_ERROR:
             return Object.assign({}, initialState, {
                 isAuth: false,

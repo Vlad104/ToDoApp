@@ -27,4 +27,12 @@ export class SessionService {
             return Promise.reject(error);
         }
     }
+
+    public async delete(session: Session): Promise<Session | undefined> {
+        try {
+            await this.sessionRepository.delete({ id: session.id });
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
 }

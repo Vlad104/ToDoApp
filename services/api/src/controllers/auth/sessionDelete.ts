@@ -3,7 +3,7 @@ import * as HttpStatus from 'http-status-codes';
 
 import { SessionService } from '../../services/SessionService';
 
-export default async function session(req: Request, res: Response, next: NextFunction) {
+export default async function sessionDelete(req: Request, res: Response, next: NextFunction) {
     const { cookies } = req;
 
     if (!cookies || !cookies.sessionId) {
@@ -15,8 +15,9 @@ export default async function session(req: Request, res: Response, next: NextFun
     const sessionService = new SessionService();
 
     try {
-        const currentSession = await sessionService.get(cookies.sessionId);
-        res.status(HttpStatus.OK).json(currentSession.user);
+        await sessionService.delete(cookies.sessionId);
+        res.clearCookie('sessionId');
+        res.sendStatus(HttpStatus.OK);
     } catch (err) {
         res.sendStatus(HttpStatus.UNAUTHORIZED);
     }
